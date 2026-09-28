@@ -60,9 +60,20 @@
     <source src="song.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- 1. QUIZ SECTION -->
-  <div class="container" id="quiz-section">
-    <h1>Unlock Your Surprise 🔐</h1>
+  <!-- 0. INTRO VIDEO SECTION -->
+  <div class="container" id="intro-section">
+    <h1>Happy Birthday Chiuuuu! 🎉</h1>
+    <video id="intro-video" controls playsinline>
+      <!-- Using your second uploaded video as the intro -->
+      <source src="Wish Video.mp4" type="video/mp4">
+    </video>
+    <br>
+    <button onclick="startQuiz()">Unlock Your Surprise 🔐</button>
+  </div>
+
+  <!-- 1. QUIZ SECTION (Now starts hidden) -->
+  <div class="container hidden" id="quiz-section">
+    <h1>A Little Riddle...</h1>
     <p id="question-text"></p>
     <input type="text" id="answer-input" placeholder="Type your answer..." autocomplete="off">
     <br>
@@ -72,27 +83,27 @@
 
   <!-- 2. PHOTO SLIDESHOW SECTION -->
   <div class="container hidden" id="slideshow-section">
-    <h1>Just look at us ❤️</h1>
+    <h1>I Love Youuuuuuuuuuuu ❤️</h1>
     <img id="current-photo" src="" alt="Us">
     <br>
     <button onclick="nextMedia()">Wanna see us more?</button>
   </div>
 
-  <!-- 3. VIDEO SECTION -->
+  <!-- 3. MAIN VIDEO SECTION -->
   <div class="container hidden" id="video-section">
     <h1>A special memory 🎥</h1>
     <video id="main-video" controls playsinline>
-      <source src="WhatsApp Video 2026-09-28 at 10.09.13.mp4" type="video/mp4">
+      <source src="Birthday video.mp4" type="video/mp4">
     </video>
     <p style="font-size: 0.9rem; margin-top: 10px;">(Watch until the end for a surprise)</p>
   </div>
 
   <!-- 4. FINAL MESSAGE SECTION -->
   <div class="container hidden" id="final-section">
-    <h1>Happy Birthday, Sakshi! 🎉❤️</h1>
+    <h1>Happy Birthday, Babbyyyy! 🎉❤️</h1>
     <div class="letter">
       <p><strong>To my Chiuuuu,</strong></p>
-      <p>I know the real letter is in your hands right now. But I just wanted to tell you I love you, and I am so grateful to have you by my side. Ik I'm not enough, ik and i understand as this is also my first time itna complicated cheeze handle kr rha huna to thoda time lagega na baby. so please forgive me na honey. I love you na baby.</p>
+      <p>I know the real letter is in your hands right now. But I just wanted to tell you I love you, and I am so grateful to have you by my side. I know I still have a lot to learn, and because this is my first time navigating something this complicated, it will take me a little time. Please forgive my mistakes, honey. I love you, baby.</p>
       <p>Forever yours,<br>Rutul</p>
     </div>
   </div>
@@ -118,12 +129,21 @@
 
     document.getElementById("question-text").innerText = questions[currentQ].q;
 
+    function startQuiz() {
+      // Pause intro video if it's still playing
+      document.getElementById("intro-video").pause();
+      // Hide intro, show quiz
+      document.getElementById("intro-section").classList.add("hidden");
+      document.getElementById("quiz-section").classList.remove("hidden");
+    }
+
     function checkAnswer() {
       const input = document.getElementById("answer-input").value.trim().toLowerCase();
       const errorMsg = document.getElementById("error-msg");
 
       if (input === questions[currentQ].a) {
         
+        // Start background music
         const audio = document.getElementById("bg-audio");
         if (audio.paused) {
           audio.play().catch(e => console.log("Audio block", e));
@@ -158,6 +178,7 @@
       } else {
         document.getElementById("slideshow-section").classList.add("hidden");
         document.getElementById("video-section").classList.remove("hidden");
+        // Start main video automatically
         document.getElementById("main-video").play();
       }
     }
