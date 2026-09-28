@@ -92,11 +92,10 @@
     </div>
   </div>
 
-  <!-- BACKGROUND AUDIO (YouTube iFrame) -->
-  <div class="hidden" id="audio-container">
-    <!-- 1 -->
-    <iframe id="bg-audio" width="10" height="10" src="https://youtu.be/2Vv-BfVoq4g?si=klZn8MT54rgRkxUuautoplay=1&loop=&autoplay=0" frameborder="0" allow="autoplay"></iframe>
-  </div>
+<!-- BACKGROUND AUDIO -->
+  <audio id="bg-audio" loop>
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     // --- CONFIGURE YOUR PHOTOS HERE ---
@@ -140,15 +139,18 @@
       }
     }
 
-    function startReveal() {
-      // Hide quiz, show slideshow
-      document.getElementById("quiz-section").classList.add("hidden");
-      document.getElementById("slideshow-section").classList.remove("hidden");
-      
-      // Play background audio (if YouTube iframe is set up properly)
-      // Note: Mobile browsers may block autoplay until the user interacts, which they just did by clicking 'Next'.
-      const iframe = document.getElementById('bg-audio');
-      iframe.src = iframe.src.replace('autoplay=0', 'autoplay=1');
+   function checkAnswer() {
+      const input = document.getElementById("answer-input").value.trim().toLowerCase();
+      const errorMsg = document.getElementById("error-msg");
+
+      if (input === questions[currentQ].a) {
+        // --- ADD THESE TWO LINES ---
+        const audio = document.getElementById("bg-audio");
+        if (audio.paused) audio.play();
+        // ---------------------------
+
+        errorMsg.classList.add("hidden");
+        document.getElementById("answer-input").value = "";
 
       // Load first photo
       document.getElementById("current-photo").src = photos[currentPhotoIndex];
