@@ -55,10 +55,15 @@
 </head>
 <body>
 
+  <!-- BACKGROUND AUDIO -->
+  <audio id="bg-audio" loop>
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+
   <!-- 1. QUIZ SECTION -->
   <div class="container" id="quiz-section">
     <h1>Unlock Your Surprise 🔐</h1>
-    <p id="question-text">Question 1...</p>
+    <p id="question-text"></p>
     <input type="text" id="answer-input" placeholder="Type your answer..." autocomplete="off">
     <br>
     <button onclick="checkAnswer()">Next</button>
@@ -92,14 +97,7 @@
     </div>
   </div>
 
-<!-- BACKGROUND AUDIO -->
-  <audio id="bg-audio" loop>
-    <source src="song.mp3" type="audio/mpeg">
-  </audio>
-
   <script>
-    // --- CONFIGURE YOUR PHOTOS HERE ---
-    // Keep it to 5-7 photos max. Add exact filenames below.
     const photos = [
       "WhatsApp Image 2026-09-28 at 10.21.58.jpeg",
       "WhatsApp Image 2026-09-28 at 10.02.40.jpeg",
@@ -125,6 +123,12 @@
       const errorMsg = document.getElementById("error-msg");
 
       if (input === questions[currentQ].a) {
+        
+        const audio = document.getElementById("bg-audio");
+        if (audio.paused) {
+          audio.play().catch(e => console.log("Audio block", e));
+        }
+
         errorMsg.classList.add("hidden");
         document.getElementById("answer-input").value = "";
         currentQ++;
@@ -139,20 +143,9 @@
       }
     }
 
-   function checkAnswer() {
-      const input = document.getElementById("answer-input").value.trim().toLowerCase();
-      const errorMsg = document.getElementById("error-msg");
-
-      if (input === questions[currentQ].a) {
-        // --- ADD THESE TWO LINES ---
-        const audio = document.getElementById("bg-audio");
-        if (audio.paused) audio.play();
-        // ---------------------------
-
-        errorMsg.classList.add("hidden");
-        document.getElementById("answer-input").value = "";
-
-      // Load first photo
+    function startReveal() {
+      document.getElementById("quiz-section").classList.add("hidden");
+      document.getElementById("slideshow-section").classList.remove("hidden");
       document.getElementById("current-photo").src = photos[currentPhotoIndex];
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     }
@@ -161,20 +154,14 @@
       currentPhotoIndex++;
       
       if (currentPhotoIndex < photos.length) {
-        // Show next photo
         document.getElementById("current-photo").src = photos[currentPhotoIndex];
       } else {
-        // Out of photos, switch to video
         document.getElementById("slideshow-section").classList.add("hidden");
         document.getElementById("video-section").classList.remove("hidden");
-        
-        // Auto-play the video
-        const video = document.getElementById("main-video");
-        video.play();
+        document.getElementById("main-video").play();
       }
     }
 
-    // 
     document.getElementById("main-video").addEventListener('ended', function() {
       document.getElementById("video-section").classList.add("hidden");
       document.getElementById("final-section").classList.remove("hidden");
